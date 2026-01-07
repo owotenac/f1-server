@@ -1,0 +1,5 @@
+fastf1
+Flask
+pandas
+aiohttp
+flask_cors

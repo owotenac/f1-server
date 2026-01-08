@@ -2,3 +2,4 @@ Flask
 pandas
 aiohttp
 flask_cors
+requests

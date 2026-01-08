@@ -1,10 +1,10 @@
 import asyncio
-from urllib.request import urlopen
-import fastf1
 import pandas as pd
 from flask import request
-import requests
+import race_picture
 import fetch
+
+
 
 racesColumns = {
     'Location' : 'location', 
@@ -21,20 +21,15 @@ def getRaces():
     if (year is None):
         message = "year parameter is required"
         return { "error": message }, 400
-    
-    if (year == 2026):
-        events = fastf1.get_event_schedule(year,include_testing=False)    
-        events = events.rename(columns=racesColumns)
-        events = events.assign(year=year)
 
-        return events.to_json(orient='records', date_format='iso')
-    else:
-        params = {
-            'year': year
-        }
-        response = asyncio.run(fetch.api_call('https://api.openf1.org/v1/meetings', params=params))
-        return response
+    params = {
+        'year': year
+    }
+    response = asyncio.run(fetch.api_call('https://api.openf1.org/v1/meetings', params=params))
 
+    for race in response:
+        pictureURL = race_picture.racePictureURLs[race['location']]
+        race['pictureURL'] = pictureURL
 
-if __name__ == "__main__":
-    getRaces()
+    return response
+

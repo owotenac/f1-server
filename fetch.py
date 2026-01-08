@@ -11,3 +11,5 @@ async def api_call(url: str, params: dict = None):
             response.raise_for_status()
             data = await response.json()
             return data
+        
+

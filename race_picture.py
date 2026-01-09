@@ -56,115 +56,41 @@ def getRacesPicture(race : dict) -> str:
     #first we test with the location
     raceName = race['location'].replace(" ","_").replace("-","_")
     r = testURL1(raceName)
-    if r != "":
-        return r
+    if r != "": return r
     #then we test with the location for the new url
     r = testURL2(year,raceName)
-    if r != "":
-        return r
+    if r != "": return r
     
     #then we test with the circuit short name    
     raceName = race['circuit_short_name'].replace(" ","_").replace("-","_")
     r = testURL1(raceName)
-    if r != "":
-        return r
+    if r != "": return r
     r = testURL2(year,raceName)
-    if r != "":
-        return r
+    if r != "": return r
     
     #then we test with the country name
     raceName = race['country_name'].replace(" ","_").replace("-","_")
     r = testURL1(raceName)
-    if r != "":
-        return r
+    if r != "": return r
     r = testURL2(year,raceName)
-    if r != "":
-        return r
+    if r != "": return r
     
     return ""
 
 def testURL1(raceName: str) -> str:
     baseURL = f'https://media.formula1.com/image/upload/c_fit,h_{height}/q_auto/v1740000000/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/{raceName}_Circuit.png'
-    response = is_valid_image_url(baseURL)
+    response = fetch.is_valid_image_url(baseURL)
     if response['valid'] and response['status_code'] == 200:
         return baseURL
     return ""
 
 def testURL2(year: int, raceName: str) -> str:
     baseURL = f'https://media.formula1.com/image/upload/c_fit,h_{height}/q_auto/v1740000000/common/f1/{year}/track/{year}track{raceName}detailed.png'
-    response = is_valid_image_url(baseURL)
+    response = fetch.is_valid_image_url(baseURL)
     if response['valid'] and response['status_code'] == 200:
         return baseURL
     return ""
 
-def is_valid_image_url(url, timeout=5):
-    """
-    Test if a URL is valid and points to an image without downloading it.
-    
-    Args:
-        url: The URL to test
-        timeout: Request timeout in seconds (default: 5)
-    
-    Returns:
-        dict: Contains 'valid' (bool), 'status_code' (int), 'content_type' (str), 'message' (str)
-    """
-    try:
-        # Validate URL format
-        parsed = urlparse(url)
-        if not all([parsed.scheme, parsed.netloc]):
-            return {
-                'valid': False,
-                'status_code': None,
-                'content_type': None,
-                'message': 'Invalid URL format'
-            }
-        
-        # Make HEAD request (doesn't download the body)
-        response = requests.head(url, timeout=timeout, allow_redirects=True)
-        
-        # Check status code
-        if response.status_code != 200:
-            return {
-                'valid': False,
-                'status_code': response.status_code,
-                'content_type': response.headers.get('Content-Type'),
-                'message': f'HTTP {response.status_code}'
-            }
-        
-        # Check content type
-        content_type = response.headers.get('Content-Type', '').lower()
-        is_image = content_type.startswith('image/')
-        
-        return {
-            'valid': is_image,
-            'status_code': response.status_code,
-            'content_type': content_type,
-            'message': 'Valid image URL' if is_image else f'Not an image (Content-Type: {content_type})'
-        }
-        
-    except requests.exceptions.Timeout:
-        return {
-            'valid': False,
-            'status_code': None,
-            'content_type': None,
-            'message': 'Request timeout'
-        }
-    except requests.exceptions.ConnectionError:
-        return {
-            'valid': False,
-            'status_code': None,
-            'content_type': None,
-            'message': 'Connection error'
-        }
-    except Exception as e:
-        return {
-            'valid': False,
-            'status_code': None,
-            'content_type': None,
-            'message': f'Error: {str(e)}'
-        }
 
-
-# Example usage
 if __name__ == "__main__":
     extractRacePictureURL(2026)

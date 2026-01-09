@@ -1,5 +1,4 @@
 import asyncio
-import pandas as pd
 from flask import request
 import race_picture
 import fetch

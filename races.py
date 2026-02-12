@@ -27,7 +27,7 @@ def getRaces():
     response = asyncio.run(fetch.api_call('https://api.openf1.org/v1/meetings', params=params))
 
     for race in response:
-        pictureURL = race_picture.racePictureURLs[race['location']]
+        pictureURL = race_picture.racePictureURLs.get(race['location'], "")
         race['pictureURL'] = pictureURL
 
     return response

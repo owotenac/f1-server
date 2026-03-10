@@ -1,5 +1,8 @@
-Flask
-pandas
-aiohttp
-flask_cors
-requests
+fastapi 
+uvicorn 
+python-multipart
+asyncio
+firebase_admin
+dotenv
+cachetools
+ollama

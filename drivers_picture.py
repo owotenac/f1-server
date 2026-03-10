@@ -258,7 +258,7 @@ driversPictureInfo = {
 }
 
 def extractDriversInfo(year: int):
-    driversData = drivers_standing.f_drivers_standing(year)
+    driversData = drivers_standing.drivers_standing(year)
     driversInfo = {}
     for driver in driversData['DriverStandings']:
         driverId = driver['Driver']['name_acronym']
@@ -283,4 +283,4 @@ def testURL(year: int, first_name: str, last_name: str, team: str) -> str:
 
 if __name__ == "__main__":
     #year 2025 => 9839
-    extractDriversInfo(2025)
+    extractDriversInfo(2026)

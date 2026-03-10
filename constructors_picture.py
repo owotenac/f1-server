@@ -75,15 +75,81 @@ contructorsInfo = {
     'team_color': '9C9FA2',
     'team_id': 'haasf1team',
     'logo_url': 'https://media.formula1.com/image/upload/c_lfill,w_40/q_auto/v1740000000/common/f1/2025/haasf1team/2025haasf1teamlogo.png'
-  }
+  },
+'mercedes': {
+  'constructorId': 'mercedes',
+  'url': 'https://en.wikipedia.org/wiki/Mercedes-Benz_in_Formula_One',
+  'name': 'Mercedes',
+  'nationality': 'German'
+},
+'ferrari': {
+  'constructorId': 'ferrari',
+  'url': 'https://en.wikipedia.org/wiki/Scuderia_Ferrari',
+  'name': 'Ferrari',
+  'nationality': 'Italian'
+},
+"mclaren": {
+  'constructorId': 'mclaren',
+  'url': 'https://en.wikipedia.org/wiki/McLaren',
+  'name': 'McLaren',
+  'nationality': 'British'
+},
+'red_bull': {
+  'constructorId': 'red_bull',
+  'url': 'https://en.wikipedia.org/wiki/Red_Bull_Racing',
+  'name': 'Red Bull',
+  'nationality': 'Austrian'
+},
+'haas': {
+  'constructorId': 'haas',
+  'url': 'https://en.wikipedia.org/wiki/Haas_F1_Team',
+  'name': 'Haas F1 Team',
+  'nationality': 'American'
+},
+'rb': {
+  'constructorId': 'rb',
+  'url': 'https://en.wikipedia.org/wiki/Racing_Bulls',
+  'name': 'RB F1 Team',
+  'nationality': 'Italian'
+},
+'audi': {
+  'constructorId': 'audi',
+  'url': 'https://en.wikipedia.org/wiki/Audi_in_Formula_One',
+  'name': 'Audi',
+  'nationality': 'German'
+},
+'alpine': {
+  'constructorId': 'alpine',
+  'url': 'https://en.wikipedia.org/wiki/Alpine_F1_Team',
+  'name': 'Alpine F1 Team',
+  'nationality': 'French'
+},
+'williams': {
+  'constructorId': 'williams',
+  'url': 'https://en.wikipedia.org/wiki/Williams_Racing',
+  'name': 'Williams',
+  'nationality': 'British'
+},
+'cadillac': {
+  'constructorId': 'cadillac',
+  'url': 'https://en.wikipedia.org/wiki/Cadillac_in_Formula_One',
+  'name': 'Cadillac F1 Team',
+  'nationality': 'American'
+},
+'aston_martin': {
+  'constructorId': 'aston_martin',
+  'url': 'https://en.wikipedia.org/wiki/Aston_Martin_in_Formula_One',
+  'name': 'Aston Martin',
+  'nationality': 'British'
+}  
 }
 
 def extractConstructorsInfo(year: int):
 
     params = {
-        'session_key': 9839
+        'session_key': 11465
     }
-    response_openf1 = asyncio.run(fetch.api_call('https://api.openf1.org/v1/drivers', params=params))
+    response_openf1 = constructors_standing
 
     constructors = {}
     for r in response_openf1:
@@ -110,4 +176,4 @@ def testURL(team: str) -> str:
 if __name__ == "__main__":
 
     #year 2025 => 9839
-    extractConstructorsInfo(2025)
+    extractConstructorsInfo(2026)

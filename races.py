@@ -1,34 +1,19 @@
-import asyncio
-from flask import request
-import race_picture
-import fetch
+from firestore_client import FirestoreClient
+from fastapi import HTTPException
+import config
 
 
+def getRaces(year: int):
+    races = []
+    try:
+        params = {
+            'year': year
+        }
+        docs = FirestoreClient().client.collection('races').get()
+        return [doc.to_dict() for doc in docs]
 
-racesColumns = {
-    'Location' : 'location', 
-    'OfficialEventName': 'meeting_official_name', 
-    'EventName': 'meeting_name',
-    'Country' : 'country_name',
-    'EventDate' : 'date_start',
-    'RoundNumber' : 'meeting_key'
-}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get races: {str(e)}")
 
-def getRaces():
-    #year
-    year = request.args.get('year', type=int)
-    if (year is None):
-        message = "year parameter is required"
-        return { "error": message }, 400
-
-    params = {
-        'year': year
-    }
-    response = asyncio.run(fetch.api_call('https://api.openf1.org/v1/meetings', params=params))
-
-    for race in response:
-        pictureURL = race_picture.racePictureURLs.get(race['location'], "")
-        race['pictureURL'] = pictureURL
-
-    return response
+    return races
 

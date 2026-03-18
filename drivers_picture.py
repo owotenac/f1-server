@@ -1,286 +1,276 @@
 
+import asyncio
+from http.client import HTTPException
+
 import drivers_standing
 import fetch
 
 driversPictureInfo = {
   'NOR': {
-    'driverId': 'norris',
-    'dateOfBirth': '1999-11-13',
-    'nationality': 'British',
+    'driver_number': 1,
+    'broadcast_name': 'L NORRIS',
+    'full_name': 'Lando NORRIS',
     'name_acronym': 'NOR',
-    'last_name': 'Norris',
-    'first_name': 'Lando',
-    'driver_number': '4',
-    'headshot_url': 'http://en.wikipedia.org/wiki/Lando_Norris',
     'team_name': 'McLaren',
-    'picture_url': 'https://media.formula1.com/image/upload/c_lfill,w_100/q_auto/v1740000000/common/f1/2025/mclaren/lannor01/2025mclarenlannor01right.png'
+    'team_colour': 'F47600',
+    'first_name': 'Lando',
+    'last_name': 'Norris',
+    'headshot_url': 'https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/L/LANNOR01_Lando_Norris/lannor01.png.transform/1col/image.png'
   },
   'VER': {
-    'driverId': 'max_verstappen',
-    'dateOfBirth': '1997-09-30',
-    'nationality': 'Dutch',
+    'driver_number': 3,
+    'broadcast_name': 'M VERSTAPPEN',
+    'full_name': 'Max VERSTAPPEN',
     'name_acronym': 'VER',
-    'last_name': 'Verstappen',
+    'team_name': 'Red Bull Racing',
+    'team_colour': '4781D7',
     'first_name': 'Max',
-    'driver_number': '3',
-    'headshot_url': 'http://en.wikipedia.org/wiki/Max_Verstappen',
-    'team_name': 'Red Bull',
-    'picture_url': 'https://media.formula1.com/image/upload/c_lfill,w_100/q_auto/v1740000000/common/f1/2025/redbullracing/maxver01/2025redbullracingmaxver01right.png'
-  },
-  'PIA': {
-    'driverId': 'piastri',
-    'dateOfBirth': '2001-04-06',
-    'nationality': 'Australian',
-    'name_acronym': 'PIA',
-    'last_name': 'Piastri',
-    'first_name': 'Oscar',
-    'driver_number': '81',
-    'headshot_url': 'http://en.wikipedia.org/wiki/Oscar_Piastri',
-    'team_name': 'McLaren',
-    'picture_url': 'https://media.formula1.com/image/upload/c_lfill,w_100/q_auto/v1740000000/common/f1/2025/mclaren/oscpia01/2025mclarenoscpia01right.png'
-  },
-  'RUS': {
-    'driverId': 'russell',
-    'dateOfBirth': '1998-02-15',
-    'nationality': 'British',
-    'name_acronym': 'RUS',
-    'last_name': 'Russell',
-    'first_name': 'George',
-    'driver_number': '63',
-    'headshot_url': 'http://en.wikipedia.org/wiki/George_Russell_(racing_driver)',
-    'team_name': 'Mercedes',
-    'picture_url': 'https://media.formula1.com/image/upload/c_lfill,w_100/q_auto/v1740000000/common/f1/2025/mercedes/georus01/2025mercedesgeorus01right.png'
-  },
-  'LEC': {
-    'driverId': 'leclerc',
-    'dateOfBirth': '1997-10-16',
-    'nationality': 'Monegasque',
-    'name_acronym': 'LEC',
-    'last_name': 'Leclerc',
-    'first_name': 'Charles',
-    'driver_number': '16',
-    'headshot_url': 'http://en.wikipedia.org/wiki/Charles_Leclerc',
-    'team_name': 'Ferrari',
-    'picture_url': 'https://media.formula1.com/image/upload/c_lfill,w_100/q_auto/v1740000000/common/f1/2025/ferrari/chalec01/2025ferrarichalec01right.png'
-  },
-  'HAM': {
-    'driverId': 'hamilton',
-    'dateOfBirth': '1985-01-07',
-    'nationality': 'British',
-    'name_acronym': 'HAM',
-    'last_name': 'Hamilton',
-    'first_name': 'Lewis',
-    'driver_number': '44',
-    'headshot_url': 'http://en.wikipedia.org/wiki/Lewis_Hamilton',
-    'team_name': 'Ferrari',
-    'picture_url': 'https://media.formula1.com/image/upload/c_lfill,w_100/q_auto/v1740000000/common/f1/2025/ferrari/lewham01/2025ferrarilewham01right.png'
-  },
-  'ANT': {
-    'driverId': 'antonelli',
-    'dateOfBirth': '2006-08-25',
-    'nationality': 'Italian',
-    'name_acronym': 'ANT',
-    'last_name': 'Antonelli',
-    'first_name': 'Andrea Kimi',
-    'driver_number': '12',
-    'headshot_url': 'https://en.wikipedia.org/wiki/Andrea_Kimi_Antonelli',
-    'team_name': 'Mercedes',
-    'picture_url': 'https://media.formula1.com/image/upload/c_lfill,w_100/q_auto/v1740000000/common/f1/2025/mercedes/andant01/2025mercedesandant01right.png'
-  },
-  'ALB': {
-    'driverId': 'albon',
-    'dateOfBirth': '1996-03-23',
-    'nationality': 'Thai',
-    'name_acronym': 'ALB',
-    'last_name': 'Albon',
-    'first_name': 'Alexander',
-    'driver_number': '23',
-    'headshot_url': 'http://en.wikipedia.org/wiki/Alexander_Albon',
-    'team_name': 'Williams',
-    'picture_url': 'https://media.formula1.com/image/upload/c_lfill,w_100/q_auto/v1740000000/common/f1/2025/williams/alealb01/2025williamsalealb01right.png'
-  },
-  'SAI': {
-    'driverId': 'sainz',
-    'dateOfBirth': '1994-09-01',
-    'nationality': 'Spanish',
-    'name_acronym': 'SAI',
-    'last_name': 'Sainz',
-    'first_name': 'Carlos',
-    'driver_number': '55',
-    'headshot_url': 'http://en.wikipedia.org/wiki/Carlos_Sainz_Jr.',
-    'team_name': 'Williams',
-    'picture_url': 'https://media.formula1.com/image/upload/c_lfill,w_100/q_auto/v1740000000/common/f1/2025/williams/carsai01/2025williamscarsai01right.png'
-  },
-  'ALO': {
-    'driverId': 'alonso',
-    'dateOfBirth': '1981-07-29',
-    'nationality': 'Spanish',
-    'name_acronym': 'ALO',
-    'last_name': 'Alonso',
-    'first_name': 'Fernando',
-    'driver_number': '14',
-    'headshot_url': 'http://en.wikipedia.org/wiki/Fernando_Alonso',
-    'team_name': 'Aston Martin',
-    'picture_url': 'https://media.formula1.com/image/upload/c_lfill,w_100/q_auto/v1740000000/common/f1/2025/astonmartin/feralo01/2025astonmartinferalo01right.png'
-  },
-  'HUL': {
-    'driverId': 'hulkenberg',
-    'dateOfBirth': '1987-08-19',
-    'nationality': 'German',
-    'name_acronym': 'HUL',
-    'last_name': 'Hülkenberg',
-    'first_name': 'Nico',
-    'driver_number': '27',
-    'headshot_url': 'http://en.wikipedia.org/wiki/Nico_H%C3%BClkenberg',
-    'team_name': 'Sauber',
-    'picture_url': 'https://media.formula1.com/image/upload/c_lfill,w_100/q_auto/v1740000000/common/f1/2025/kicksauber/nichül01/2025kicksaubernichül01right.png'
-  },
-  'HAD': {
-    'driverId': 'hadjar',
-    'dateOfBirth': '2004-09-28',
-    'nationality': 'French',
-    'name_acronym': 'HAD',
-    'last_name': 'Hadjar',
-    'first_name': 'Isack',
-    'driver_number': '6',
-    'headshot_url': 'https://en.wikipedia.org/wiki/Isack_Hadjar',
-    'team_name': 'RB F1 Team',
-    'picture_url': 'https://media.formula1.com/image/upload/c_lfill,w_100/q_auto/v1740000000/common/f1/2025/racingbulls/isahad01/2025racingbullsisahad01right.png'
-  },
-  'BEA': {
-    'driverId': 'bearman',
-    'dateOfBirth': '2005-05-08',
-    'nationality': 'British',
-    'name_acronym': 'BEA',
-    'last_name': 'Bearman',
-    'first_name': 'Oliver',
-    'driver_number': '87',
-    'headshot_url': 'http://en.wikipedia.org/wiki/Oliver_Bearman',
-    'team_name': 'Haas F1 Team',
-    'picture_url': 'https://media.formula1.com/image/upload/c_lfill,w_100/q_auto/v1740000000/common/f1/2025/haasf1team/olibea01/2025haasf1teamolibea01right.png'
-  },
-  'LAW': {
-    'driverId': 'lawson',
-    'dateOfBirth': '2002-02-11',
-    'nationality': 'New Zealander',
-    'name_acronym': 'LAW',
-    'last_name': 'Lawson',
-    'first_name': 'Liam',
-    'driver_number': '30',
-    'headshot_url': 'http://en.wikipedia.org/wiki/Liam_Lawson',
-    'team_name': 'Red Bull',
-    'picture_url': 'https://media.formula1.com/image/upload/c_lfill,w_100/q_auto/v1740000000/common/f1/2025/redbullracing/lialaw01/2025redbullracinglialaw01right.png'
-  },
-  'OCO': {
-    'driverId': 'ocon',
-    'dateOfBirth': '1996-09-17',
-    'nationality': 'French',
-    'name_acronym': 'OCO',
-    'last_name': 'Ocon',
-    'first_name': 'Esteban',
-    'driver_number': '31',
-    'headshot_url': 'http://en.wikipedia.org/wiki/Esteban_Ocon',
-    'team_name': 'Haas F1 Team',
-    'picture_url': 'https://media.formula1.com/image/upload/c_lfill,w_100/q_auto/v1740000000/common/f1/2025/haasf1team/estoco01/2025haasf1teamestoco01right.png'
-  },
-  'STR': {
-    'driverId': 'stroll',
-    'dateOfBirth': '1998-10-29',
-    'nationality': 'Canadian',
-    'name_acronym': 'STR',
-    'last_name': 'Stroll',
-    'first_name': 'Lance',
-    'driver_number': '18',
-    'headshot_url': 'http://en.wikipedia.org/wiki/Lance_Stroll',
-    'team_name': 'Aston Martin',
-    'picture_url': 'https://media.formula1.com/image/upload/c_lfill,w_100/q_auto/v1740000000/common/f1/2025/astonmartin/lanstr01/2025astonmartinlanstr01right.png'
-  },
-  'TSU': {
-    'driverId': 'tsunoda',
-    'dateOfBirth': '2000-05-11',
-    'nationality': 'Japanese',
-    'name_acronym': 'TSU',
-    'last_name': 'Tsunoda',
-    'first_name': 'Yuki',
-    'driver_number': '22',
-    'headshot_url': 'http://en.wikipedia.org/wiki/Yuki_Tsunoda',
-    'team_name': 'RB F1 Team',
-    'picture_url': 'https://media.formula1.com/image/upload/c_lfill,w_100/q_auto/v1740000000/common/f1/2025/racingbulls/yuktsu01/2025racingbullsyuktsu01right.png'
-  },
-  'GAS': {
-    'driverId': 'gasly',
-    'dateOfBirth': '1996-02-07',
-    'nationality': 'French',
-    'name_acronym': 'GAS',
-    'last_name': 'Gasly',
-    'first_name': 'Pierre',
-    'driver_number': '10',
-    'headshot_url': 'http://en.wikipedia.org/wiki/Pierre_Gasly',
-    'team_name': 'Alpine F1 Team',
-    'picture_url': 'https://media.formula1.com/image/upload/c_lfill,w_100/q_auto/v1740000000/common/f1/2025/alpine/piegas01/2025alpinepiegas01right.png'
+    'last_name': 'Verstappen',
+    'headshot_url': 'https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/M/MAXVER01_Max_Verstappen/maxver01.png.transform/1col/image.png'
   },
   'BOR': {
-    'driverId': 'bortoleto',
-    'dateOfBirth': '2004-10-14',
-    'nationality': 'Brazilian',
+    'driver_number': 5,
+    'broadcast_name': 'G BORTOLETO',
+    'full_name': 'Gabriel BORTOLETO',
     'name_acronym': 'BOR',
-    'last_name': 'Bortoleto',
+    'team_name': 'Audi',
+    'team_colour': 'F50537',
     'first_name': 'Gabriel',
-    'driver_number': '5',
-    'headshot_url': 'https://en.wikipedia.org/wiki/Gabriel_Bortoleto',
-    'team_name': 'Sauber',
-    'picture_url': 'https://media.formula1.com/image/upload/c_lfill,w_100/q_auto/v1740000000/common/f1/2025/kicksauber/gabbor01/2025kicksaubergabbor01right.png'
+    'last_name': 'Bortoleto',
+    'headshot_url': 'https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/G/GABBOR01_Gabriel_Bortoleto/gabbor01.png.transform/1col/image.png'
+  },
+  'HAD': {
+    'driver_number': 6,
+    'broadcast_name': 'I HADJAR',
+    'full_name': 'Isack HADJAR',
+    'name_acronym': 'HAD',
+    'team_name': 'Red Bull Racing',
+    'team_colour': '4781D7',
+    'first_name': 'Isack',
+    'last_name': 'Hadjar',
+    'headshot_url': 'https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/I/ISAHAD01_Isack_Hadjar/isahad01.png.transform/1col/image.png'
+  },
+  'GAS': {
+    'driver_number': 10,
+    'broadcast_name': 'P GASLY',
+    'full_name': 'Pierre GASLY',
+    'name_acronym': 'GAS',
+    'team_name': 'Alpine',
+    'team_colour': '00A1E8',
+    'first_name': 'Pierre',
+    'last_name': 'Gasly',
+    'headshot_url': 'https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/P/PIEGAS01_Pierre_Gasly/piegas01.png.transform/1col/image.png'
+  },
+  'PER': {
+    'driver_number': 11,
+    'broadcast_name': 'S PEREZ',
+    'full_name': 'Sergio PEREZ',
+    'name_acronym': 'PER',
+    'team_name': 'Cadillac',
+    'team_colour': '909090',
+    'first_name': 'Sergio',
+    'last_name': 'Perez',
+    'headshot_url': 'https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/S/SERPER01_Sergio_Perez/serper01.png.transform/1col/image.png'
+  },
+  'ANT': {
+    'driver_number': 12,
+    'broadcast_name': 'K ANTONELLI',
+    'full_name': 'Kimi ANTONELLI',
+    'name_acronym': 'ANT',
+    'team_name': 'Mercedes',
+    'team_colour': '00D7B6',
+    'first_name': 'Kimi',
+    'last_name': 'Antonelli',
+    'headshot_url': 'https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/K/ANDANT01_Kimi_Antonelli/andant01.png.transform/1col/image.png'
+  },
+  'ALO': {
+    'driver_number': 14,
+    'broadcast_name': 'F ALONSO',
+    'full_name': 'Fernando ALONSO',
+    'name_acronym': 'ALO',
+    'team_name': 'Aston Martin',
+    'team_colour': '229971',
+    'first_name': 'Fernando',
+    'last_name': 'Alonso',
+    'headshot_url': 'https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/F/FERALO01_Fernando_Alonso/feralo01.png.transform/1col/image.png'
+  },
+  'LEC': {
+    'driver_number': 16,
+    'broadcast_name': 'C LECLERC',
+    'full_name': 'Charles LECLERC',
+    'name_acronym': 'LEC',
+    'team_name': 'Ferrari',
+    'team_colour': 'ED1131',
+    'first_name': 'Charles',
+    'last_name': 'Leclerc',
+    'headshot_url': 'https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/C/CHALEC01_Charles_Leclerc/chalec01.png.transform/1col/image.png'
+  },
+  'STR': {
+    'driver_number': 18,
+    'broadcast_name': 'L STROLL',
+    'full_name': 'Lance STROLL',
+    'name_acronym': 'STR',
+    'team_name': 'Aston Martin',
+    'team_colour': '229971',
+    'first_name': 'Lance',
+    'last_name': 'Stroll',
+    'headshot_url': 'https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/L/LANSTR01_Lance_Stroll/lanstr01.png.transform/1col/image.png'
+  },
+  'ALB': {
+    'driver_number': 23,
+    'broadcast_name': 'A ALBON',
+    'full_name': 'Alexander ALBON',
+    'name_acronym': 'ALB',
+    'team_name': 'Williams',
+    'team_colour': '1868DB',
+    'first_name': 'Alexander',
+    'last_name': 'Albon',
+    'headshot_url': 'https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/A/ALEALB01_Alexander_Albon/alealb01.png.transform/1col/image.png'
+  },
+  'HUL': {
+    'driver_number': 27,
+    'broadcast_name': 'N HULKENBERG',
+    'full_name': 'Nico HULKENBERG',
+    'name_acronym': 'HUL',
+    'team_name': 'Audi',
+    'team_colour': 'F50537',
+    'first_name': 'Nico',
+    'last_name': 'Hulkenberg',
+    'headshot_url': 'https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/N/NICHUL01_Nico_Hulkenberg/nichul01.png.transform/1col/image.png'
+  },
+  'LAW': {
+    'driver_number': 30,
+    'broadcast_name': 'L LAWSON',
+    'full_name': 'Liam LAWSON',
+    'name_acronym': 'LAW',
+    'team_name': 'Racing Bulls',
+    'team_colour': '6C98FF',
+    'first_name': 'Liam',
+    'last_name': 'Lawson',
+    'headshot_url': 'https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/L/LIALAW01_Liam_Lawson/lialaw01.png.transform/1col/image.png'
+  },
+  'OCO': {
+    'driver_number': 31,
+    'broadcast_name': 'E OCON',
+    'full_name': 'Esteban OCON',
+    'name_acronym': 'OCO',
+    'team_name': 'Haas F1 Team',
+    'team_colour': '9C9FA2',
+    'first_name': 'Esteban',
+    'last_name': 'Ocon',
+    'headshot_url': 'https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/E/ESTOCO01_Esteban_Ocon/estoco01.png.transform/1col/image.png'
+  },
+  'LIN': {
+    'driver_number': 41,
+    'broadcast_name': 'A LINDBLAD',
+    'full_name': 'Arvid LINDBLAD',
+    'name_acronym': 'LIN',
+    'team_name': 'Racing Bulls',
+    'team_colour': '6C98FF',
+    'first_name': 'Arvid',
+    'last_name': 'Lindblad',
+    'headshot_url': 'https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/A/ARVLIN01_Arvid_Lindblad/arvlin01.png.transform/1col/image.png'
   },
   'COL': {
-    'driverId': 'colapinto',
-    'dateOfBirth': '2003-05-27',
-    'nationality': 'Argentine',
+    'driver_number': 43,
+    'broadcast_name': 'F COLAPINTO',
+    'full_name': 'Franco COLAPINTO',
     'name_acronym': 'COL',
-    'last_name': 'Colapinto',
+    'team_name': 'Alpine',
+    'team_colour': '00A1E8',
     'first_name': 'Franco',
-    'driver_number': '43',
-    'headshot_url': 'http://en.wikipedia.org/wiki/Franco_Colapinto',
-    'team_name': 'Alpine F1 Team',
-    'picture_url': 'https://media.formula1.com/image/upload/c_lfill,w_100/q_auto/v1740000000/common/f1/2025/alpine/fracol01/2025alpinefracol01right.png'
+    'last_name': 'Colapinto',
+    'headshot_url': 'https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/F/FRACOL01_Franco_Colapinto/fracol01.png.transform/1col/image.png'
   },
-  'DOO': {
-    'driverId': 'doohan',
-    'dateOfBirth': '2003-01-20',
-    'nationality': 'Australian',
-    'name_acronym': 'DOO',
-    'last_name': 'Doohan',
-    'first_name': 'Jack',
-    'driver_number': '7',
-    'headshot_url': 'http://en.wikipedia.org/wiki/Jack_Doohan',
-    'team_name': 'Alpine F1 Team',
-    'picture_url': 'https://media.formula1.com/image/upload/c_lfill,w_100/q_auto/v1740000000/common/f1/2025/alpine/jacdoo01/2025alpinejacdoo01right.png'
+  'HAM': {
+    'driver_number': 44,
+    'broadcast_name': 'L HAMILTON',
+    'full_name': 'Lewis HAMILTON',
+    'name_acronym': 'HAM',
+    'team_name': 'Ferrari',
+    'team_colour': 'ED1131',
+    'first_name': 'Lewis',
+    'last_name': 'Hamilton',
+    'headshot_url': 'https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/L/LEWHAM01_Lewis_Hamilton/lewham01.png.transform/1col/image.png'
+  },
+  'SAI': {
+    'driver_number': 55,
+    'broadcast_name': 'C SAINZ',
+    'full_name': 'Carlos SAINZ',
+    'name_acronym': 'SAI',
+    'team_name': 'Williams',
+    'team_colour': '1868DB',
+    'first_name': 'Carlos',
+    'last_name': 'Sainz',
+    'headshot_url': 'https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/C/CARSAI01_Carlos_Sainz/carsai01.png.transform/1col/image.png'
+  },
+  'RUS': {
+    'driver_number': 63,
+    'broadcast_name': 'G RUSSELL',
+    'full_name': 'George RUSSELL',
+    'name_acronym': 'RUS',
+    'team_name': 'Mercedes',
+    'team_colour': '00D7B6',
+    'first_name': 'George',
+    'last_name': 'Russell',
+    'headshot_url': 'https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/G/GEORUS01_George_Russell/georus01.png.transform/1col/image.png'
+  },
+  'BOT': {
+    'driver_number': 77,
+    'broadcast_name': 'V BOTTAS',
+    'full_name': 'Valtteri BOTTAS',
+    'name_acronym': 'BOT',
+    'team_name': 'Cadillac',
+    'team_colour': '909090',
+    'first_name': 'Valtteri',
+    'last_name': 'Bottas',
+    'headshot_url': 'https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/V/VALBOT01_Valtteri_Bottas/valbot01.png.transform/1col/image.png'
+  },
+  'PIA': {
+    'driver_number': 81,
+    'broadcast_name': 'O PIASTRI',
+    'full_name': 'Oscar PIASTRI',
+    'name_acronym': 'PIA',
+    'team_name': 'McLaren',
+    'team_colour': 'F47600',
+    'first_name': 'Oscar',
+    'last_name': 'Piastri',
+    'headshot_url': 'https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/O/OSCPIA01_Oscar_Piastri/oscpia01.png.transform/1col/image.png'
+  },
+  'BEA': {
+    'driver_number': 87,
+    'broadcast_name': 'O BEARMAN',
+    'full_name': 'Oliver BEARMAN',
+    'name_acronym': 'BEA',
+    'team_name': 'Haas F1 Team',
+    'team_colour': '9C9FA2',
+    'first_name': 'Oliver',
+    'last_name': 'Bearman',
+    'headshot_url': 'https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/O/OLIBEA01_Oliver_Bearman/olibea01.png.transform/1col/image.png'
   }
-}
+}    
 
-def extractDriversInfo(year: int):
-    driversData = drivers_standing.drivers_standing(year)
-    driversInfo = {}
-    for driver in driversData['DriverStandings']:
-        driverId = driver['Driver']['name_acronym']
-        teamId = driver['team']['team_id']
-        driversInfo[driverId] = driver['Driver']
-        driversInfo[driverId]['picture_url'] = testURL(year, driver['Driver']['first_name'], driver['Driver']['last_name'], teamId)
-
-    print (driversInfo)
-    return driversInfo
-
-
-def testURL(year: int, first_name: str, last_name: str, team: str) -> str:
-    first_name = first_name[:3].lower()
-    last_name = last_name[:3].lower()
-    name = f'{first_name}{last_name}01'
-    baseURL = f'https://media.formula1.com/image/upload/c_lfill,w_100/q_auto/v1740000000/common/f1/{year}/{team}/{name}/{year}{team}{name}right.png'
-    print(baseURL)
-    response = fetch.is_valid_image_url(baseURL)
-    if response['valid'] and response['status_code'] == 200:
-        return baseURL
-    return ""
+def extractDriversInfo():
+    
+    #we get the drivers standing for a specific session
+    try:
+        params = {
+            'session_key': 11234
+        }
+        response = asyncio.run(fetch.api_call('https://api.openf1.org/v1/drivers', params=params))
+  
+        drivers_list = {}
+        for d in response:
+            d.pop('meeting_key')
+            d.pop('session_key')
+            d.pop('country_code')
+            drivers_list[ d['name_acronym'] ] = d
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get races: {str(e)}")
+    
+    print (drivers_list)
 
 if __name__ == "__main__":
     #year 2025 => 9839
-    extractDriversInfo(2026)
+    extractDriversInfo()

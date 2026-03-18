@@ -27,7 +27,9 @@ async def api_call(url: str, params: dict = None):
     if isinstance(response, tuple) and response[1] != 200:
         return response
 
-    api_cache[cache_key] = response
+    if use_cache:
+        api_cache[cache_key] = response
+
     return response
 
 async def p_api_call(url: str, params: dict = None):

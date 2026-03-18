@@ -1,5 +1,5 @@
 from races import getRaces
-from store import storeRaces
+from store import storeRaces, storeSessionsResults
 from sessions import getSessions 
 from session_result import get_session_result
 from drivers_standing import drivers_standing
@@ -30,6 +30,7 @@ app.add_api_route('/api/v1/drivers_standing', drivers_standing,  methods=["GET"]
 app.add_api_route('/api/v1/constructors_standing', constructors_standing,  methods=["GET"])
 
 app.add_api_route('/api/v1/storeRaces', storeRaces, methods=["POST"])
+app.add_api_route('/api/v1/storeSessionsResults', storeSessionsResults, methods=["POST"])
 
 app.add_api_route('/api/v1/generate-briefing', generate_briefing, methods=["POST"])
 app.add_api_route('/api/v1/briefing', get_briefing, methods=["GET"])

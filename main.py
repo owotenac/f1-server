@@ -39,5 +39,5 @@ app.add_api_route('/api/v1/briefing', get_briefing, methods=["GET"])
 def main():
     uvicorn.run("main:app", host="0.0.0.0", port=5001, reload=True)
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()

@@ -5,4 +5,4 @@ asyncio
 firebase_admin
 dotenv
 cachetools
-ollama
+aiohttp

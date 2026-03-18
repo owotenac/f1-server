@@ -5,6 +5,6 @@
 ```
 
 ```bash
-flask --app main run --port 5001 --debug
+uvicorn main:app --port 5001 --reload True
 ```
 

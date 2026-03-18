@@ -4,6 +4,7 @@ import json
 import firebase_admin
 from firebase_admin import credentials, firestore
 from firebase_admin import db
+import base64
 
 class FirestoreClient(object):
     _instance = None
@@ -22,11 +23,11 @@ class FirestoreClient(object):
         """
         load_dotenv() 
         # Try to get credentials from environment variable
-        cred_json = os.environ.get('asc-db')
+        cred_env = os.environ.get('FIREBASE_SERVICE_ACCOUNT_BASE64')
         secret_file_path = './f1-app_db.json'
 
-        if cred_json:
-            cred_dict = json.loads(cred_json)
+        if cred_env:
+            cred_dict = json.loads(base64.b64decode(cred_env).decode("utf-8")) 
             cred = credentials.Certificate(cred_dict)
         elif os.path.exists(secret_file_path):
             # Running locally with JSON file (for development only)

@@ -20,7 +20,7 @@ def drivers_standing(year : int):
 
         #then rename keys to fit with Props in client
         for driver in simplifiedResponse['DriverStandings']:
-            driver["Driver"]["picture_url"] = drivers_picture.driversPictureInfo.get(driver["Driver"]["code"], {}).get("headshot_url", "")
+            driver["Driver"]= drivers_picture.driversPictureInfo.get(driver["Driver"]["code"], {})
             #then if we find the teamname in the constructor list, we add it
             team_id = driver["Constructors"][0]["constructorId"]
             #then we had the team information

@@ -5,6 +5,7 @@
 ```
 
 ```bash
-uvicorn main:app --port 5001 --reload True
+uvicorn main:app --port 5001 --reload
+
 ```
 

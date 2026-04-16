@@ -52,7 +52,7 @@ async def _get_next_gp(year: int, round: int) -> dict:
 async def _get_last_results(year: int, last_n: int = 3) -> list:
     """Résultats des N dernières courses pour la forme des pilotes"""
     # Récupère le calendrier pour trouver les derniers rounds disputés
-    data  = await fetch.api_call(f"{JOLPICA_BASE_URL}/{year}/results.json")
+    data  = await fetch.api_call(f"{JOLPICA_BASE_URL}/{year}/results?limit=100")
     races = data.get("MRData", {}).get("RaceTable", {}).get("Races", []) or []
 
     if last_n <= 0 or not races:
@@ -241,6 +241,23 @@ async def _build_briefing_data(year: int, round: int) -> dict:
         "standings":        standings,
         "weather_forecast": weather,
         "drivers_lineup":   drivers_lineup,        
+    }
+
+async def raceData(year: int, round: int) -> dict:
+    gp = await _get_next_gp(year, round)
+
+    # Appels parallèles
+    last_results, circuit_history, weather = await asyncio.gather(
+        _get_last_results(year),
+        _get_circuit_history(gp["circuit_id"], year),
+        _get_weather_forecast(gp["lat"], gp["lng"], gp["date"]),
+    )
+
+    return {
+        "grand_prix":       gp,
+        "circuit_history":  circuit_history,
+        "last_races":       last_results,
+        "weather_forecast": weather,
     }
 
 

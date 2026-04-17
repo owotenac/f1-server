@@ -40,10 +40,15 @@ def getLastResults():
         if last_gp is None:
             raise HTTPException(status_code=404, detail=f"Last GP not found")
 
-        #meeting key
-        session_result = get_session_result(last_gp['meeting_key'], last_gp['race_sessions']['Race'])
+        #get the last session of the race
+        last_session_id = last_gp['race_sessions']['Race']
+        session_ref = FirestoreClient().client.collection('sessions').document(f"{last_gp['meeting_key']}-{last_session_id}").get()
+        session = session_ref.to_dict()
 
-        return { 'Race': last_gp, 'Results' : session_result}
+        #session results
+        session_result = get_session_result(last_gp['meeting_key'], last_session_id)
+
+        return { 'Race' : last_gp, 'Session': session, 'Results' : session_result}
 
     except HTTPException as e:
         raise e

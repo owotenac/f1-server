@@ -13,11 +13,10 @@ def get_cache_key(url, customParams):
     return hashlib.md5(url.encode() + json.dumps(customParams).encode() ).hexdigest()
 
 async def api_call(url: str, params: dict = None):
-    use_cache = True
     """API call with caching support"""
     cache_key = get_cache_key(url, params)
 
-    if use_cache and cache_key in api_cache:
+    if cache_key in api_cache:
         print(f"Cache hit for {url} and {json.dumps(params)}")
         return api_cache[cache_key]
 
@@ -27,8 +26,7 @@ async def api_call(url: str, params: dict = None):
     if isinstance(response, tuple) and response[1] != 200:
         return response
 
-    if use_cache:
-        api_cache[cache_key] = response
+    api_cache[cache_key] = response
 
     return response
 

@@ -3,6 +3,9 @@ import fetch
 import constructors_picture
 from fastapi import HTTPException
 import copy
+from cachetools import cached, TTLCache
+
+@cached(cache=TTLCache(maxsize=5, ttl=3600))
 def constructors_standing(year: int):
 
     try: 

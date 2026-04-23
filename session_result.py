@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 from google.cloud import firestore
 import fetch
 import asyncio
+from cachetools import cached, TTLCache
 
 
 def get_session_result(meeting_key: int, session_key: int):
@@ -22,6 +23,7 @@ def get_session_result(meeting_key: int, session_key: int):
     return session_results.to_dict()
 
 
+@cached(cache=TTLCache(maxsize=1, ttl=3600))
 def getLastResults():
     try:
         races_ref = FirestoreClient().client.collection('races')
@@ -55,6 +57,7 @@ def getLastResults():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to get session result: {str(e)}")
 
+@cached(cache=TTLCache(maxsize=1, ttl=3600))
 def getNextGP():
     try:
         races_ref = FirestoreClient().client.collection('races')

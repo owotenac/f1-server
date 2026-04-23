@@ -7,6 +7,7 @@ import asyncio
 from firestore_client import FirestoreClient
 from fastapi import HTTPException
 from datetime import datetime, timezone
+from race_data import race_data 
 
 def parse_dt(s: str) -> datetime:
     return datetime.fromisoformat(s).astimezone(timezone.utc)
@@ -30,6 +31,18 @@ def storeRaces(year: int):
             #update date
             race['date_start']= parse_dt(race["date_start"])
             race['date_end']= parse_dt(race["date_end"])
+            #get info from race_data 
+            if race['location'] in race_data:
+                circuit_info = race_data[race['location']]
+                race['circuit_length_km'] = circuit_info['circuit_length_km']
+                race['number_of_laps'] = circuit_info['number_of_laps']
+                race['race_distance_km'] = circuit_info['race_distance_km']
+                race['number_of_corners'] = circuit_info['number_of_corners']
+                race['fastest_lap'] = circuit_info['fastest_lap']
+            else:
+                print(f"No circuit info found for {race['location']}")
+
+                
             #store races
             FirestoreClient().client.collection('races').document(str(race["meeting_key"])).set(race)
 

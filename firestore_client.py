@@ -12,7 +12,7 @@ class FirestoreClient(object):
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super(FirestoreClient, cls).__new__(cls)
-            cls._instance.client = cls._instance.getFirestoreClient()
+            cls._instance.client = cls._instance.client()
 
         return cls._instance
 
@@ -35,8 +35,7 @@ class FirestoreClient(object):
         else:
             raise ValueError("Firebase credentials not found")
         return cred    
-
-    def getFirestoreClient(self) -> firestore.client:
+    def client(self) -> firestore.client:
         cred = self.firestoreCredentials()
         if not firebase_admin._apps:
             firebase_admin.initialize_app(cred)

@@ -12,7 +12,7 @@ def get_cache_key(url, customParams):
     """Generate a unique cache key from URL"""
     return hashlib.md5(url.encode() + json.dumps(customParams).encode() ).hexdigest()
 
-async def api_call(url: str, params: dict = None):
+async def api_call(url: str, params: dict = {}):
     """API call with caching support"""
     cache_key = get_cache_key(url, params)
 
@@ -27,10 +27,9 @@ async def api_call(url: str, params: dict = None):
         return response
 
     api_cache[cache_key] = response
-
     return response
 
-async def p_api_call(url: str, params: dict = None):
+async def p_api_call(url: str, params: dict ):
     headers = {
         "Accept": "application/json",
     }
@@ -44,7 +43,7 @@ async def p_api_call(url: str, params: dict = None):
             
     except aiohttp.ClientResponseError as e:
         print(f"Error fetching URL: {url} with {e.code}")
-        return {"error": str(e.message)}, e.status
+        return {"error": e.message}, e.status
     except Exception as e:
         print(f"Error fetching URL: {url} with {e}")
         return {"error": str(e)}, 500    

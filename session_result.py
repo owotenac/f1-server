@@ -53,10 +53,13 @@ def getLastResults():
         return { 'Race' : last_gp, 'Session': session, 'Results' : session_result}
 
     except HTTPException as e:
+        print(e)
         raise e
     except Exception as e:
+        print(e)
         raise HTTPException(status_code=500, detail=f"Failed to get session result: {str(e)}")
 
+        
 @cached(cache=TTLCache(maxsize=1, ttl=3600))
 def getNextGP():
     try:
@@ -73,10 +76,15 @@ def getNextGP():
         )
 
         next_gp = next_snap[0].to_dict() if next_snap else None
+        if next_gp is None:
+            raise HTTPException(status_code=404, detail=f"Next GP not found")
+
 
         return {"next_gp": next_gp}
 
     except HTTPException as e:
+        print(e)
         raise e
     except Exception as e:
+        print(e)
         raise HTTPException(status_code=500, detail=f"Failed to get session result: {str(e)}")

@@ -18,7 +18,7 @@ contructorsInfo = {
   'mclaren': {
     'name': 'McLaren',
     'constructorId': 'mclaren',
-    'logo_url': 'https://media.formula1.com/image/upload/c_lfill,w_64/q_auto/v1740000000/common/f1/2026/mclaren/2026mclarenlogo.png',
+    'logo_url': 'https://media.formula1.com/image/upload/c_lfill,w_64/q_auto/v1740000000/common/f1/2026/mclaren/2026mclarenlogowhite.png',
     "color": "F47600"
   },
   'red_bull': {
@@ -48,13 +48,13 @@ contructorsInfo = {
   'alpine': {
     'name': 'Alpine F1 Team',
     'constructorId': 'alpine',
-    'logo_url': 'https://media.formula1.com/image/upload/c_lfill,w_64/q_auto/v1740000000/common/f1/2026/alpine/2026alpinelogo.png',
+    'logo_url': 'https://media.formula1.com/image/upload/c_lfill,w_64/q_auto/v1740000000/common/f1/2026/alpine/2026alpinelogowhite.png',
     "color": "00A1E8",
   },
   'williams': {
     'name': 'Williams',
     'constructorId': 'williams',
-    'logo_url': 'https://media.formula1.com/image/upload/c_lfill,w_64/q_auto/v1740000000/common/f1/2026/williams/2026williamslogo.png',
+    'logo_url': 'https://media.formula1.com/image/upload/c_lfill,w_64/q_auto/v1740000000/common/f1/2026/williams/2026williamslogowhite.png',
     "color": "1868DB",
   },
   'cadillac': {

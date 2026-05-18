@@ -7,3 +7,4 @@ dotenv
 cachetools
 aiohttp
 requests
+apscheduler==3.10.4

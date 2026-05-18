@@ -1,3 +1,5 @@
+from fastapi.concurrency import asynccontextmanager
+
 from races import getRaces
 from store import storeRaces, storeSessionsResults
 from sessions import getSessions 
@@ -9,8 +11,25 @@ from briefing import generate_briefing, get_briefing, raceData
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from cron import scheduler, rehydrate_scheduler
+import logging
+logging.basicConfig(level=logging.DEBUG)
+                    
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    scheduler.start()
+    await rehydrate_scheduler()
+    
+    logging.info("Server is up and running!")
+    print("Server is up and running!")
+    yield 
+    
+    # Shutdown
+    scheduler.shutdown()
 
-app = FastAPI()
+
+app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -22,6 +41,7 @@ app.add_middleware(
 @app.get("/")
 def index():
     return "Ready"
+
 
 app.add_api_route('/api/v1/meetings', getRaces, methods=["GET"])
 app.add_api_route('/api/v1/sessions', getSessions, methods=["GET"])

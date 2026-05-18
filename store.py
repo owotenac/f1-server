@@ -60,6 +60,7 @@ def storeSessions(meeting_key: int):
 
         raceSessions = {}
         for session in response:
+            session['status'] = 'pending'
             FirestoreClient().client.collection('sessions').document(f'{meeting_key}-{session["session_key"]}').set(session)
             raceSessions[session['session_name']] = session['session_key']
 
@@ -68,14 +69,19 @@ def storeSessions(meeting_key: int):
     
     return raceSessions
 
-def storeSessionsResults(meeting_key: int, session_key: int):
+async def storeSessionsResults(meeting_key: int, session_key: int):
     try:
         params = {
             'session_key': session_key
         }
-        response = asyncio.run(fetch.api_call('https://api.openf1.org/v1/session_result', params=params))
+        session_result = {}
+
+        response = await fetch.api_call('https://api.openf1.org/v1/session_result', params=params)
+        if len(response) == 0:
+            #no results yet 
+            return None
         #then we retrieve the driver info
-        drivers = asyncio.run(fetch.api_call('https://api.openf1.org/v1/drivers', params=params))
+        drivers = await fetch.api_call('https://api.openf1.org/v1/drivers', params=params)
         #create a map of driver id to driver info
         driver_map = {driver['driver_number']: driver for driver in drivers}
         #enrich the response with driver info     
@@ -84,10 +90,12 @@ def storeSessionsResults(meeting_key: int, session_key: int):
             if driver_id in driver_map:
                 result['driver_info'] = driver_map[driver_id]
 
-        session_result = {}
         session_result['results'] = response #because it's an array
-        
         FirestoreClient().client.collection('session_results').document(f'{meeting_key}-{session_key}').set(session_result)
+
+        #then update status to done
+        session = FirestoreClient().client.collection('sessions').document(f'{meeting_key}-{session_key}')
+        session.update({'status': 'done'})
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to get store session: {str(e)}")

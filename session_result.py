@@ -61,7 +61,7 @@ def getLastResults():
 
         
 @cached(cache=TTLCache(maxsize=1, ttl=3600))
-def getNextGP():
+async def getNextGP():
     try:
         races_ref = FirestoreClient().client.collection('races')
         now = datetime.now(timezone.utc)
